@@ -17,5 +17,4 @@ public class Controlador {
             itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
-
 }

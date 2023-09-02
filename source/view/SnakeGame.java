@@ -9,16 +9,21 @@ import source.controller.Controlador;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class SnakeGame extends JPanel implements ActionListener {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
     private final int UNIT_SIZE = 20;
+    private char[] direcoes = {'U', 'D', 'L', 'R'};
 
+    private Random random = new Random();
     private ArrayList<Formiga> formigas = new ArrayList<>();
     private ArrayList<Item> itens = new ArrayList<>();
     private Controlador controller = new Controlador();
+    private char direcao = 'R';
     private boolean isRunning = false;
+    private final int DELAY = 100;
 
     public SnakeGame() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -31,6 +36,8 @@ public class SnakeGame extends JPanel implements ActionListener {
         controller.criarFormigas(formigas, WIDTH, HEIGHT, UNIT_SIZE);
         controller.criarItens(itens, WIDTH, HEIGHT, UNIT_SIZE);
         isRunning = true;
+        Timer timer = new Timer(DELAY, this);
+        timer.start();
     }
 
     public void paintComponent(Graphics g) {
@@ -57,9 +64,30 @@ public class SnakeGame extends JPanel implements ActionListener {
         }
     }
 
+    public void move() {
+        Point head = formigas.get(0).getPontos().get(0);
+        switch (direcao) {
+            case 'U':
+                head.y -= UNIT_SIZE;
+                break;
+            case 'D':
+                head.y += UNIT_SIZE;
+                break;
+            case 'L':
+                head.x -= UNIT_SIZE;
+                break;
+            case 'R':
+                head.x += UNIT_SIZE;
+                break;
+        }
+        int indiceSorteado = random.nextInt(direcoes.length);
+        direcao = direcoes[indiceSorteado];
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (isRunning) {
+            move();
             repaint();
         }
     }
