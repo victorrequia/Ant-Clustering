@@ -15,7 +15,6 @@ public class SnakeGame extends JPanel implements ActionListener {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
     private final int UNIT_SIZE = 20;
-    private char[] direcoes = { 'U', 'D', 'L', 'R' };
 
     private Random random = new Random();
     private ArrayList<Formiga> formigas = new ArrayList<>();
@@ -65,31 +64,10 @@ public class SnakeGame extends JPanel implements ActionListener {
     }
 
     public void move() {
-        Point head = formigas.get(0).getPontos().get(0);
-        switch (direcao) {
-            case 'U':
-                if (head.getY() > 0) {
-                    head.y -= UNIT_SIZE;
-                }
-                break;
-            case 'D':
-                if (head.getY() < HEIGHT - 20) {
-                    head.y += UNIT_SIZE;
-                }
-                break;
-            case 'L':
-                if (head.getX() > 0) {
-                    head.x -= UNIT_SIZE;
-                }
-                break;
-            case 'R':
-                if (head.getX() < WIDTH - 20) {
-                    head.x += UNIT_SIZE;
-                }
-                break;
+        for(Formiga formiga : formigas){
+            Point head = formiga.getPontos().get(0);
+            direcao = controller.move(head, direcao, UNIT_SIZE, HEIGHT, WIDTH);
         }
-        int indiceSorteado = random.nextInt(direcoes.length);
-        direcao = direcoes[indiceSorteado];
     }
 
     @Override
