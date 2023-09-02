@@ -1,3 +1,4 @@
+package source;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -11,11 +12,12 @@ public class SnakeGame extends JPanel implements ActionListener {
     private final int DELAY = 100;
 
     private ArrayList<Point> snake;
-    private Point food;
+    private ArrayList<Point> food;
     private boolean isRunning = false;
 
     public SnakeGame() {
         snake = new ArrayList<>();
+        food = new ArrayList<>();
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
         setFocusable(true);
@@ -25,6 +27,7 @@ public class SnakeGame extends JPanel implements ActionListener {
     public void startGame() {
         snake.clear();
         snake.add(new Point(UNIT_SIZE, UNIT_SIZE));
+        snake.add(new Point(UNIT_SIZE+20, UNIT_SIZE+20));
         createFood();
         isRunning = true;
         Timer timer = new Timer(DELAY, this);
@@ -32,15 +35,16 @@ public class SnakeGame extends JPanel implements ActionListener {
     }
 
     public void createFood() {
-        int x = new Random().nextInt(WIDTH / UNIT_SIZE) * UNIT_SIZE;
-        int y = new Random().nextInt(HEIGHT / UNIT_SIZE) * UNIT_SIZE;
-        food = new Point(x, y);
+        for(int i=0; i<10; i++){
+            int x = new Random().nextInt(WIDTH / UNIT_SIZE) * UNIT_SIZE;
+            int y = new Random().nextInt(HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+            food.add(new Point(x, y));
+        }
     }
 
     public void checkCollision() {
         Point head = snake.get(0);
         if (head.equals(food)) {
-            snake.add(new Point(food));
             createFood();
         }
 
@@ -68,7 +72,14 @@ public class SnakeGame extends JPanel implements ActionListener {
                 g.fillRect(point.x, point.y, UNIT_SIZE, UNIT_SIZE);
             }
             g.setColor(Color.RED);
-            g.fillRect(food.x, food.y, UNIT_SIZE, UNIT_SIZE);
+        for(int i=0; i<10; i++){
+            int x = new Random().nextInt(WIDTH / UNIT_SIZE) * UNIT_SIZE;
+            int y = new Random().nextInt(HEIGHT / UNIT_SIZE) * UNIT_SIZE;
+            food.add(new Point(x, y));
+        
+            g.fillRect(food.get(i).x , food.get(i).y , UNIT_SIZE, UNIT_SIZE);
+        }
+            
         }
     }
 
