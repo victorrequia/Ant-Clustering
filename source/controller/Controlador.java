@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
-import source.model.*;
+import source.model.Formiga;
+import source.model.Item;
+import source.view.SnakeGame;
 
 public class Controlador {
     private Random random = new Random();
@@ -22,7 +24,7 @@ public class Controlador {
         }
     }
 
-    public char move(Point head, char direcao, int UNIT_SIZE, int HEIGHT, int WIDTH){
+    public char move(Point head, char direcao, int UNIT_SIZE, int HEIGHT, int WIDTH) {
         switch (direcao) {
             case 'U':
                 if (head.getY() > 0) {
@@ -30,7 +32,7 @@ public class Controlador {
                 }
                 break;
             case 'D':
-                if (head.getY() < HEIGHT - 20) {
+                if (head.getY() < HEIGHT - UNIT_SIZE) {
                     head.y += UNIT_SIZE;
                 }
                 break;
@@ -40,7 +42,7 @@ public class Controlador {
                 }
                 break;
             case 'R':
-                if (head.getX() < WIDTH - 20) {
+                if (head.getX() < WIDTH - UNIT_SIZE) {
                     head.x += UNIT_SIZE;
                 }
                 break;
@@ -49,4 +51,16 @@ public class Controlador {
         direcao = direcoes[indiceSorteado];
         return direcao;
     }
+
+    public void decisao(Formiga formiga, ArrayList<Item> itens, Point head) {
+        for (Item item : itens) {
+            for (Point point : item.getPontos()) {
+                if (point.getX() == head.getX() && point.getY() == head.getY()) {
+                    System.out.println("Chegou no item");
+                    SnakeGame.carregando.add(formiga);
+                }
+            }
+        }
+    }
+
 }

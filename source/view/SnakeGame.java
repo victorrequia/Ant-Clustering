@@ -16,7 +16,7 @@ public class SnakeGame extends JPanel implements ActionListener {
     private final int HEIGHT = 600;
     private final int UNIT_SIZE = 20;
 
-    private Random random = new Random();
+    public static ArrayList<Formiga> carregando = new ArrayList<>();
     private ArrayList<Formiga> formigas = new ArrayList<>();
     private ArrayList<Item> itens = new ArrayList<>();
     private Controlador controller = new Controlador();
@@ -45,7 +45,7 @@ public class SnakeGame extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
-        if (isRunning) {
+     
             g.setColor(Color.GREEN);
             for (Formiga formiga : formigas) {
                 for (Point point : formiga.getPontos()) {
@@ -60,13 +60,26 @@ public class SnakeGame extends JPanel implements ActionListener {
                 }
             }
 
-        }
+            g.setColor(Color.BLUE);
+            for (Formiga formiga : carregando) {
+                for (Point point : formiga.getPontos()) {
+                    g.fillRect(point.x, point.y, UNIT_SIZE, UNIT_SIZE);
+                }
+            }
+        
     }
 
     public void move() {
-        for(Formiga formiga : formigas){
+        for (Formiga formiga : formigas) {
             Point head = formiga.getPontos().get(0);
             direcao = controller.move(head, direcao, UNIT_SIZE, HEIGHT, WIDTH);
+        }
+    }
+
+    public void decisao() {
+        for (Formiga formiga : formigas) {
+            Point head = formiga.getPontos().get(0);
+            controller.decisao(formiga, itens, head);
         }
     }
 
@@ -74,6 +87,7 @@ public class SnakeGame extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (isRunning) {
             move();
+            decisao();
             repaint();
         }
     }
