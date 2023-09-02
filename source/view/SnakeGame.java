@@ -15,13 +15,13 @@ public class SnakeGame extends JPanel implements ActionListener {
     private final int WIDTH = 800;
     private final int HEIGHT = 600;
     private final int UNIT_SIZE = 20;
-    private char[] direcoes = {'U', 'D', 'L', 'R'};
+    private char[] direcoes = { 'U', 'D', 'L', 'R' };
 
     private Random random = new Random();
     private ArrayList<Formiga> formigas = new ArrayList<>();
     private ArrayList<Item> itens = new ArrayList<>();
     private Controlador controller = new Controlador();
-    private char direcao = 'R';
+    private char direcao = 'U';
     private boolean isRunning = false;
     private final int DELAY = 100;
 
@@ -68,16 +68,24 @@ public class SnakeGame extends JPanel implements ActionListener {
         Point head = formigas.get(0).getPontos().get(0);
         switch (direcao) {
             case 'U':
-                head.y -= UNIT_SIZE;
+                if (head.getY() > 0) {
+                    head.y -= UNIT_SIZE;
+                }
                 break;
             case 'D':
-                head.y += UNIT_SIZE;
+                if (head.getY() < HEIGHT - 20) {
+                    head.y += UNIT_SIZE;
+                }
                 break;
             case 'L':
-                head.x -= UNIT_SIZE;
+                if (head.getX() > 0) {
+                    head.x -= UNIT_SIZE;
+                }
                 break;
             case 'R':
-                head.x += UNIT_SIZE;
+                if (head.getX() < WIDTH - 20) {
+                    head.x += UNIT_SIZE;
+                }
                 break;
         }
         int indiceSorteado = random.nextInt(direcoes.length);
