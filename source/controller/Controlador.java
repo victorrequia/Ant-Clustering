@@ -2,6 +2,7 @@ package source.controller;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import source.model.Formiga;
@@ -53,11 +54,14 @@ public class Controlador {
     }
 
     public void decisao(Formiga formiga, ArrayList<Item> itens, Point head) {
-        for (Item item : itens) {
+        Iterator<Item> itemIterator = itens.iterator();
+        while (itemIterator.hasNext()) {
+            Item item = itemIterator.next();
             for (Point point : item.getPontos()) {
                 if (point.getX() == head.getX() && point.getY() == head.getY()) {
                     System.out.println("Chegou no item");
                     SnakeGame.carregando.add(formiga);
+                    itemIterator.remove();
                 }
             }
         }
