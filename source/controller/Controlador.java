@@ -14,13 +14,13 @@ public class Controlador {
     private char[] direcoes = { 'U', 'D', 'L', 'R' };
 
     public void criarFormigas(ArrayList<Formiga> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             itens.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
 
     public void criarItens(ArrayList<Item> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
@@ -80,11 +80,40 @@ public class Controlador {
             Item item = itemIterator.next();
             for (Point point : item.getPontos()) {
                 if (point.getX() == head.getX() && point.getY() == head.getY()) {
-                    SnakeGame.carregando.add(formiga);
-                    itemIterator.remove();
+                    int soma = quantidadeItensProximos(itens, head);
+                    System.out.println("Soma: " + soma);
+                    //SnakeGame.carregando.add(formiga);
+                    //itemIterator.remove();
                 }
             }
         }
     }
 
+    public int quantidadeItensProximos(ArrayList<Item> itens, Point head) {
+        int soma = 0;
+    
+        // Possible relative positions to check
+        int[][] directions = {
+            {-20, 0},  // Up
+            {20, 0},   // Down
+            {0, -20},  // Left
+            {0, 20},   // Right
+            {-20, -20}, // Upper left
+            {20, -20},  // Lower left
+            {-20, 20},  // Upper right
+            {20, 20}    // Lower right
+        };
+    
+        for (Item item : itens) {
+            for (Point point : item.getPontos()) {
+                for (int[] direction : directions) {
+                    if (point.x + direction[0] == head.x && point.y + direction[1] == head.y) {
+                        soma += 1;
+                    }
+                }
+            }
+        }
+    
+        return soma;
+    }
 }
