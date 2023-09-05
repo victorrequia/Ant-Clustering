@@ -28,7 +28,7 @@ public class SnakeGame extends JPanel implements ActionListener {
     private Controlador controller = new Controlador();
     private char direcao = 'U';
     private boolean isRunning = false;
-    private final int DELAY = 200;
+    private final int DELAY = 100;
 
     public SnakeGame() throws IOException {
         bgImage = ImageIO.read(new File("source/images/textura-do-fundo-da-estrada-de-terra-128043659.jpg"));
@@ -94,11 +94,16 @@ public class SnakeGame extends JPanel implements ActionListener {
         }
     }
 
+    public void largar() {
+        controller.largar(itens, carregando);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (isRunning) {
             move();
             decisao();
+            largar();
             repaint();
         }
     }

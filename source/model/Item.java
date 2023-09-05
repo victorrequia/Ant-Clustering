@@ -13,6 +13,12 @@ public class Item {
         pontos.add(new Point(x, y));
     }
 
+    public Item(int WIDTH, int HEIGHT, int UNIT_SIZE, Point point) {
+        int x = point.x;
+        int y = point.y;
+        pontos.add(new Point(x, y));
+    }
+
     // Getters e Setters
     public ArrayList<Point> getPontos() {
         return pontos;

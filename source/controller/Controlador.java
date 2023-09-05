@@ -1,6 +1,7 @@
 package source.controller;
 
 import java.awt.Point;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -14,13 +15,13 @@ public class Controlador {
     private char[] direcoes = { 'U', 'D', 'L', 'R' };
 
     public void criarFormigas(ArrayList<Formiga> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 5; i++) {
             itens.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
 
     public void criarItens(ArrayList<Item> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 30; i++) {
             itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
@@ -82,8 +83,15 @@ public class Controlador {
                 if (point.getX() == head.getX() && point.getY() == head.getY()) {
                     int soma = quantidadeItensProximos(itens, head);
                     System.out.println("Soma: " + soma);
-                    //SnakeGame.carregando.add(formiga);
-                    //itemIterator.remove();
+
+                    float chance = (float) (1 - soma / 8.0);
+                    System.out.println("Chance " + chance);
+                    if (random.nextFloat() < chance) {
+                        SnakeGame.carregando.add(formiga);
+                        itemIterator.remove();
+                    }
+
+                    break;
                 }
             }
         }
@@ -91,19 +99,19 @@ public class Controlador {
 
     public int quantidadeItensProximos(ArrayList<Item> itens, Point head) {
         int soma = 0;
-    
+
         // Possible relative positions to check
         int[][] directions = {
-            {-20, 0},  // Up
-            {20, 0},   // Down
-            {0, -20},  // Left
-            {0, 20},   // Right
-            {-20, -20}, // Upper left
-            {20, -20},  // Lower left
-            {-20, 20},  // Upper right
-            {20, 20}    // Lower right
+                { -20, 0 }, // Up
+                { 20, 0 }, // Down
+                { 0, -20 }, // Left
+                { 0, 20 }, // Right
+                { -20, -20 }, // Upper left
+                { 20, -20 }, // Lower left
+                { -20, 20 }, // Upper right
+                { 20, 20 } // Lower right
         };
-    
+
         for (Item item : itens) {
             for (Point point : item.getPontos()) {
                 for (int[] direction : directions) {
@@ -113,7 +121,27 @@ public class Controlador {
                 }
             }
         }
-    
+
         return soma;
+    }
+
+    public void largar(ArrayList<Item> itens, ArrayList<Formiga> formigasCarregando) {
+        Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
+
+        while (formigaCarregandoIterator.hasNext()) {
+            Formiga formiga = formigaCarregandoIterator.next();
+
+            Point head = formiga.getPontos().get(0);
+
+            int soma = quantidadeItensProximos(itens, head);
+            float chance = (float) soma / 8;
+            System.out.println("Chance de largar " + chance);
+            if (random.nextFloat() < chance) {
+                itens.add(new Item(800, 600, 20, head));
+                formigaCarregandoIterator.remove();
+            }
+
+        }
+
     }
 }
