@@ -27,26 +27,47 @@ public class Controlador {
 
     public char move(Point head, char direcao, int UNIT_SIZE, int HEIGHT, int WIDTH) {
         switch (direcao) {
+
             case 'U':
                 if (head.getY() > 0) {
+
                     head.y -= UNIT_SIZE;
                 }
+
+                if (head.getY() == 0) {
+                    head.y = HEIGHT - 20;
+                }
                 break;
+
             case 'D':
                 if (head.getY() < HEIGHT - UNIT_SIZE) {
                     head.y += UNIT_SIZE;
                 }
+                if (head.getY() == HEIGHT - 20) {
+                    head.y = 0;
+                }
                 break;
+
             case 'L':
                 if (head.getX() > 0) {
                     head.x -= UNIT_SIZE;
                 }
+
+                if (head.getX() == 0) {
+                    head.x = WIDTH - 20;
+                }
                 break;
+
             case 'R':
                 if (head.getX() < WIDTH - UNIT_SIZE) {
                     head.x += UNIT_SIZE;
                 }
+
+                if (head.getX() == WIDTH - UNIT_SIZE) {
+                    head.x = 0;
+                }
                 break;
+
         }
         int indiceSorteado = random.nextInt(direcoes.length);
         direcao = direcoes[indiceSorteado];
@@ -59,7 +80,6 @@ public class Controlador {
             Item item = itemIterator.next();
             for (Point point : item.getPontos()) {
                 if (point.getX() == head.getX() && point.getY() == head.getY()) {
-                    System.out.println("Chegou no item");
                     SnakeGame.carregando.add(formiga);
                     itemIterator.remove();
                 }
