@@ -1,115 +1,140 @@
 package source.controller;
 
 import java.awt.Point;
-import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import source.model.Formiga;
-import source.model.Item;
-import source.view.SnakeGame;
+import source.model.*;
 
 public class Controlador {
     private Random random = new Random();
     private char[] direcoes = { 'U', 'D', 'L', 'R' };
+    private int WIDTH;
+    private int HEIGHT;
+    private int UNIT_SIZE;
 
-    public void criarFormigas(ArrayList<Formiga> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 5; i++) {
-            itens.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE));
+    // Construtor
+    public Controlador(int WIDTH, int HEIGHT, int UNIT_SIZE) {
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+        this.UNIT_SIZE = UNIT_SIZE;
+    }
+
+    // Colocar formigas de forma aleatorio no mapa
+    public void criarFormigas(ArrayList<Formiga> formigas, int quantidadeFormigas) {
+        for (int i = 0; i < quantidadeFormigas; i++) {
+            formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
 
-    public void criarItens(ArrayList<Item> itens, int WIDTH, int HEIGHT, int UNIT_SIZE) {
-        for (int i = 0; i < 30; i++) {
+    // Colocar itens de forma aleatorio no mapa
+    public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
+        for (int i = 0; i < quantidadeItens; i++) {
             itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE));
         }
     }
 
-    public char move(Point head, char direcao, int UNIT_SIZE, int HEIGHT, int WIDTH) {
-        switch (direcao) {
+    // Movimentar a formiga
+    public char move(ArrayList<Formiga> formigas, char direcao) {
+        for (Formiga formiga : formigas) {
+            Point head = formiga.getPontos().get(0);
+            switch (direcao) {
+                case 'U':
+                    if (head.getY() > 0) {
 
-            case 'U':
-                if (head.getY() > 0) {
+                        head.y -= UNIT_SIZE;
+                    }
+                    if (head.getY() == 0) {
+                        head.y = HEIGHT - UNIT_SIZE;
+                    }
+                    break;
+                case 'D':
+                    if (head.getY() < HEIGHT - UNIT_SIZE) {
+                        head.y += UNIT_SIZE;
+                    }
+                    if (head.getY() == HEIGHT - UNIT_SIZE) {
+                        head.y = 0;
+                    }
+                    break;
+                case 'L':
+                    if (head.getX() > 0) {
+                        head.x -= UNIT_SIZE;
+                    }
+                    if (head.getX() == 0) {
+                        head.x = WIDTH - UNIT_SIZE;
+                    }
+                    break;
+                case 'R':
+                    if (head.getX() < WIDTH - UNIT_SIZE) {
+                        head.x += UNIT_SIZE;
+                    }
+                    if (head.getX() == WIDTH - UNIT_SIZE) {
+                        head.x = 0;
+                    }
+                    break;
 
-                    head.y -= UNIT_SIZE;
-                }
-
-                if (head.getY() == 0) {
-                    head.y = HEIGHT - 20;
-                }
-                break;
-
-            case 'D':
-                if (head.getY() < HEIGHT - UNIT_SIZE) {
-                    head.y += UNIT_SIZE;
-                }
-                if (head.getY() == HEIGHT - 20) {
-                    head.y = 0;
-                }
-                break;
-
-            case 'L':
-                if (head.getX() > 0) {
-                    head.x -= UNIT_SIZE;
-                }
-
-                if (head.getX() == 0) {
-                    head.x = WIDTH - 20;
-                }
-                break;
-
-            case 'R':
-                if (head.getX() < WIDTH - UNIT_SIZE) {
-                    head.x += UNIT_SIZE;
-                }
-
-                if (head.getX() == WIDTH - UNIT_SIZE) {
-                    head.x = 0;
-                }
-                break;
-
+            }
+            int indiceSorteado = random.nextInt(direcoes.length);
+            direcao = direcoes[indiceSorteado];
         }
-        int indiceSorteado = random.nextInt(direcoes.length);
-        direcao = direcoes[indiceSorteado];
         return direcao;
     }
 
-    public void decisao(Formiga formiga, ArrayList<Item> itens, Point head) {
-        Iterator<Item> itemIterator = itens.iterator();
-        while (itemIterator.hasNext()) {
-            Item item = itemIterator.next();
-            for (Point point : item.getPontos()) {
-                if (point.getX() == head.getX() && point.getY() == head.getY()) {
-                    int soma = quantidadeItensProximos(itens, head);
-                    System.out.println("Soma: " + soma);
+    // Decidir se a formiga pega o item
+    public void decisaoPegar(ArrayList<Formiga> formigas, ArrayList<Formiga> carregando, ArrayList<Item> itens) {
+        for (Formiga formiga : formigas) {
+            Point head = formiga.getPontos().get(0);
+            Iterator<Item> itemIterator = itens.iterator();
+            while (itemIterator.hasNext()) {
+                Item item = itemIterator.next();
+                for (Point point : item.getPontos()) {
+                    if (point.getX() == head.getX() && point.getY() == head.getY()) {
+                        int soma = quantidadeItensProximos(itens, head);
+                        System.out.println("Soma: " + soma);
 
-                    float chance = (float) (1 - soma / 8.0);
-                    System.out.println("Chance " + chance);
-                    if (random.nextFloat() < chance) {
-                        SnakeGame.carregando.add(formiga);
-                        itemIterator.remove();
+                        float chance = (float) (1 - soma / 8.0);
+                        System.out.println("Chance " + chance);
+                        if (random.nextFloat() < chance) {
+                            carregando.add(formiga);
+                            itemIterator.remove();
+                        }
+                        break;
                     }
-
-                    break;
                 }
             }
+        }
+    }
+
+    public void decisaoLargar(ArrayList<Item> itens, ArrayList<Formiga> formigasCarregando) {
+        Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
+
+        while (formigaCarregandoIterator.hasNext()) {
+            Formiga formiga = formigaCarregandoIterator.next();
+            Point head = formiga.getPontos().get(0);
+            int soma = quantidadeItensProximos(itens, head);
+            float chance = (float) soma / 8;
+            System.out.println("Chance de largar " + chance);
+            if (random.nextFloat() < chance) {
+                itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head));
+                formigaCarregandoIterator.remove();
+            }
+
         }
     }
 
     public int quantidadeItensProximos(ArrayList<Item> itens, Point head) {
         int soma = 0;
 
-        // Possible relative positions to check
         int[][] directions = {
-                { -20, 0 }, // Up
-                { 20, 0 }, // Down
-                { 0, -20 }, // Left
-                { 0, 20 }, // Right
-                { -20, -20 }, // Upper left
-                { 20, -20 }, // Lower left
-                { -20, 20 }, // Upper right
-                { 20, 20 } // Lower right
+                { -UNIT_SIZE, 0 }, // Cima
+                { UNIT_SIZE, 0 }, // Baixo
+                { 0, -UNIT_SIZE }, // Esquerda
+                { 0, UNIT_SIZE }, // Direita
+                { -UNIT_SIZE, -UNIT_SIZE }, // Superior Esquerdo
+                { UNIT_SIZE, -UNIT_SIZE }, // Inferior Esquerdo
+                { -UNIT_SIZE, UNIT_SIZE }, // Superior Direito
+                { UNIT_SIZE, UNIT_SIZE } // Inferior Direito
         };
 
         for (Item item : itens) {
@@ -121,27 +146,6 @@ public class Controlador {
                 }
             }
         }
-
         return soma;
-    }
-
-    public void largar(ArrayList<Item> itens, ArrayList<Formiga> formigasCarregando) {
-        Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
-
-        while (formigaCarregandoIterator.hasNext()) {
-            Formiga formiga = formigaCarregandoIterator.next();
-
-            Point head = formiga.getPontos().get(0);
-
-            int soma = quantidadeItensProximos(itens, head);
-            float chance = (float) soma / 8;
-            System.out.println("Chance de largar " + chance);
-            if (random.nextFloat() < chance) {
-                itens.add(new Item(800, 600, 20, head));
-                formigaCarregandoIterator.remove();
-            }
-
-        }
-
     }
 }
