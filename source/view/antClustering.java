@@ -30,6 +30,7 @@ public class AntClustering extends JPanel implements ActionListener {
     private Image formigaImage;
     private Image formigaCarregandoImage;
     private Image folhaImage;
+    private Image cupcakeImage;
     private ArrayList<Formiga> formigas;
     private ArrayList<Item> itens;
     private Controlador controller;
@@ -44,6 +45,7 @@ public class AntClustering extends JPanel implements ActionListener {
         bgImage = ImageIO.read(new File("source/images/background.jpg"));
         formigaImage = ImageIO.read(new File("source/images/formiga.png"));
         folhaImage = ImageIO.read(new File("source/images/folha.png"));
+        cupcakeImage = ImageIO.read(new File("source/images/cupcake.png"));
         formigaCarregandoImage = ImageIO.read(new File("source/images/formiga_carregando.png"));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);

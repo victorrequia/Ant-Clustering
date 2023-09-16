@@ -7,6 +7,7 @@ import java.util.Random;
 
 import source.model.Formiga;
 import source.model.Item;
+import source.model.Folha;
 
 public class Controlador {
     private Random random = new Random();
@@ -31,18 +32,18 @@ public class Controlador {
 
     // Colocar itens de forma aleatorio no mapa
     public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
-        Item item;
+        Folha item;
         int i = 0;
         int count;
 
         if (itens.isEmpty()) {
-            item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
+            item = new Folha(WIDTH, HEIGHT, UNIT_SIZE);
             itens.add(item);
         }
 
         while (i < quantidadeItens - 1) {
             count = 0;
-            item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
+            item = new Folha(WIDTH, HEIGHT, UNIT_SIZE);
             for (int j = 0; j < itens.size(); j++) {
                 if (itens.get(j).getPonto().getX() == item.getPonto().getX()
                         && itens.get(j).getPonto().getY() == item.getPonto().getY()) {
@@ -110,7 +111,7 @@ public class Controlador {
             Point head = formiga.getPontos().get(0);
 
             while (itemIterator.hasNext()) {
-                Item item = itemIterator.next();
+                Item item = (Folha) itemIterator.next();
                 boolean itemPickedUp = false;
 
                 if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
@@ -147,7 +148,7 @@ public class Controlador {
                 int soma = quantidadeItensProximos(itens, head);
                 float chance = (float) soma / 8;
                 if (random.nextFloat() < chance) {
-                    itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head));
+                    itens.add(new Folha(WIDTH, HEIGHT, UNIT_SIZE, head));
                     formigaCarregandoIterator.remove();
                     formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE, formiga.getPontos().get(0)));
                 }
