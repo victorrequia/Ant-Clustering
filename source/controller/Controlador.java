@@ -130,18 +130,27 @@ public class Controlador {
         }
     }
 
-    public void decisaoLargar(ArrayList<Formiga> formigas, ArrayList<Item> itens,
-            ArrayList<Formiga> formigasCarregando) {
+    public void decisaoLargar(ArrayList<Formiga> formigas, ArrayList<Item> itens, ArrayList<Formiga> formigasCarregando) {
         Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
+        int count = 0;
         while (formigaCarregandoIterator.hasNext()) {
             Formiga formiga = formigaCarregandoIterator.next();
+            count = 0;
             Point head = formiga.getPontos().get(0);
-            int soma = quantidadeItensProximos(itens, head);
-            float chance = (float) soma / 8;
-            if (random.nextFloat() < chance) {
-                itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head));
-                formigaCarregandoIterator.remove();
-                formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE, formiga.getPontos().get(0)));
+            for (int i = 0; i < itens.size(); i++) {
+                if (itens.get(i).getPonto().getX() == head.getX() && itens.get(i).getPonto().getY() == head.getY()) {
+                    count++;
+                    break;
+                }
+            }
+            if (count == 0) {
+                int soma = quantidadeItensProximos(itens, head);
+                float chance = (float) soma / 8;
+                if (random.nextFloat() < chance) {
+                    itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head));
+                    formigaCarregandoIterator.remove();
+                    formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE, formiga.getPontos().get(0)));
+                }
             }
         }
     }
