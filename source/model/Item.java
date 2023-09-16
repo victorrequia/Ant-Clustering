@@ -1,32 +1,31 @@
 package source.model;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Random;
 
 public class Item {
-    private ArrayList<Point> pontos = new ArrayList<>();
+    private Point ponto;
 
     // Colocar item de forma aleatória no mapa
     public Item(int WIDTH, int HEIGHT, int UNIT_SIZE) {
         int x = new Random().nextInt(WIDTH / UNIT_SIZE) * UNIT_SIZE;
         int y = new Random().nextInt(HEIGHT / UNIT_SIZE) * UNIT_SIZE;
-        pontos.add(new Point(x, y));
+        ponto = new Point(x, y);
     }
 
     // Colocar item de forma pontual no mapa
     public Item(int WIDTH, int HEIGHT, int UNIT_SIZE, Point point) {
         int x = point.x;
         int y = point.y;
-        pontos.add(new Point(x, y));
+        ponto = new Point(x, y);
     }
 
     // Getters e Setters
-    public ArrayList<Point> getPontos() {
-        return pontos;
+    public Point getPonto() {
+        return ponto;
     }
 
-    public void setPontos(ArrayList<Point> pontos) {
-        this.pontos = pontos;
+    public void setPontos(Point ponto) {
+        this.ponto = ponto;
     }
 }

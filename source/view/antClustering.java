@@ -1,17 +1,24 @@
 package source.view;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import source.model.Formiga;
-import source.model.Item;
-import source.controller.Controlador;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import source.controller.Controlador;
+import source.model.Formiga;
+import source.model.Item;
 
 public class AntClustering extends JPanel implements ActionListener {
     private final int WIDTH = 800;
@@ -68,9 +75,8 @@ public class AntClustering extends JPanel implements ActionListener {
 
         g.setColor(Color.RED);
         for (Item item : itens) {
-            for (Point point : item.getPontos()) {
-                g.drawImage(folhaImage, point.x, point.y, UNIT_SIZE, UNIT_SIZE, null);
-            }
+            g.drawImage(folhaImage, (int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                    null);
         }
 
         g.setColor(Color.BLUE);

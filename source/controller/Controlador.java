@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import source.model.*;
+import source.model.Formiga;
+import source.model.Item;
 
 public class Controlador {
     private Random random = new Random();
@@ -30,8 +31,29 @@ public class Controlador {
 
     // Colocar itens de forma aleatorio no mapa
     public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
-        for (int i = 0; i < quantidadeItens; i++) {
-            itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE));
+        Item item;
+        int i = 0;
+        int count;
+
+        if (itens.isEmpty()) {
+            item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
+            itens.add(item);
+        }
+
+        while (i < quantidadeItens - 1) {
+            count = 0;
+            item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
+            for (int j = 0; j < itens.size(); j++) {
+                if (itens.get(j).getPonto().getX() == item.getPonto().getX()
+                        && itens.get(j).getPonto().getY() == item.getPonto().getY()) {
+                    count++;
+                    break;
+                }
+            }
+            if (count == 0) {
+                itens.add(item);
+                i++;
+            }
         }
     }
 
@@ -91,18 +113,16 @@ public class Controlador {
                 Item item = itemIterator.next();
                 boolean itemPickedUp = false;
 
-                for (Point point : item.getPontos()) {
-                    if (point.getX() == head.getX() && point.getY() == head.getY()) {
-                        int soma = quantidadeItensProximos(itens, head);
-                        float chance = (float) (1 - soma / 8.0);
-                        if (random.nextFloat() < chance) {
-                            carregando.add(formiga);
-                            formigaIterator.remove();
-                            itemIterator.remove();
-                            itemPickedUp = true;
-                        }
-                        break;
+                if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
+                    int soma = quantidadeItensProximos(itens, head);
+                    float chance = (float) (1 - soma / 8.0);
+                    if (random.nextFloat() < chance) {
+                        carregando.add(formiga);
+                        formigaIterator.remove();
+                        itemIterator.remove();
+                        itemPickedUp = true;
                     }
+                    break;
                 }
                 if (itemPickedUp)
                     break;
@@ -141,11 +161,9 @@ public class Controlador {
         };
 
         for (Item item : itens) {
-            for (Point point : item.getPontos()) {
-                for (int[] direction : directions) {
-                    if (point.x + direction[0] == head.x && point.y + direction[1] == head.y) {
-                        soma += 1;
-                    }
+            for (int[] direction : directions) {
+                if (item.getPonto().x + direction[0] == head.x && item.getPonto().y + direction[1] == head.y) {
+                    soma += 1;
                 }
             }
         }
