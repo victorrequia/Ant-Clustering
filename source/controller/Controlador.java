@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import source.model.Cupcake;
+import source.model.Folha;
 import source.model.Formiga;
 import source.model.Item;
-import source.model.Folha;
 
 public class Controlador {
     private Random random = new Random();
@@ -32,9 +33,9 @@ public class Controlador {
 
     // Colocar itens de forma aleatorio no mapa
     public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
-        Folha item;
         int i = 0;
         int count;
+        Item item;
 
         if (itens.isEmpty()) {
             item = new Folha(WIDTH, HEIGHT, UNIT_SIZE);
@@ -42,8 +43,15 @@ public class Controlador {
         }
 
         while (i < quantidadeItens - 1) {
+            int randomItem = random.nextInt(1, 3);
             count = 0;
-            item = new Folha(WIDTH, HEIGHT, UNIT_SIZE);
+            if (randomItem == 1) {
+                item = new Folha(WIDTH, HEIGHT, UNIT_SIZE);
+                System.out.println("FOLHA");
+            } else {
+                item = new Cupcake(WIDTH, HEIGHT, UNIT_SIZE);
+                System.out.println("CUPCAKE");
+            }
             for (int j = 0; j < itens.size(); j++) {
                 if (itens.get(j).getPonto().getX() == item.getPonto().getX()
                         && itens.get(j).getPonto().getY() == item.getPonto().getY()) {
@@ -111,7 +119,7 @@ public class Controlador {
             Point head = formiga.getPontos().get(0);
 
             while (itemIterator.hasNext()) {
-                Item item = (Folha) itemIterator.next();
+                Item item = itemIterator.next();
                 boolean itemPickedUp = false;
 
                 if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
@@ -131,7 +139,8 @@ public class Controlador {
         }
     }
 
-    public void decisaoLargar(ArrayList<Formiga> formigas, ArrayList<Item> itens, ArrayList<Formiga> formigasCarregando) {
+    public void decisaoLargar(ArrayList<Formiga> formigas, ArrayList<Item> itens,
+            ArrayList<Formiga> formigasCarregando) {
         Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
         int count = 0;
         while (formigaCarregandoIterator.hasNext()) {

@@ -77,8 +77,13 @@ public class AntClustering extends JPanel implements ActionListener {
 
         g.setColor(Color.RED);
         for (Item item : itens) {
-            g.drawImage(folhaImage, (int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
-                    null);
+            if (item.getClass().getSimpleName().equals("Folha")) {
+                g.drawImage(folhaImage, (int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE,
+                        UNIT_SIZE, null);
+            } else {
+                g.drawImage(cupcakeImage, (int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE,
+                        UNIT_SIZE, null);
+            }
         }
 
         g.setColor(Color.BLUE);
