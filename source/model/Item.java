@@ -3,7 +3,7 @@ package source.model;
 import java.awt.Point;
 import java.util.Random;
 
-public class Item {
+public abstract class Item {
     private Point ponto;
 
     // Colocar item de forma aleatória no mapa

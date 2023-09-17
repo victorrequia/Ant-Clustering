@@ -18,6 +18,7 @@ import javax.swing.Timer;
 
 import source.controller.Controlador;
 import source.model.Formiga;
+import source.model.FormigaCarregando;
 import source.model.Item;
 
 public class AntClustering extends JPanel implements ActionListener {
@@ -26,7 +27,7 @@ public class AntClustering extends JPanel implements ActionListener {
     private final int UNIT_SIZE = 20;
     private Image bgImage;
 
-    private ArrayList<Formiga> formigasCarregando = new ArrayList<>();
+    private ArrayList<FormigaCarregando> formigasCarregando = new ArrayList<>();
     private Image formigaImage;
     private Image formigaCarregandoImage;
     private Image folhaImage;
@@ -35,7 +36,7 @@ public class AntClustering extends JPanel implements ActionListener {
     private ArrayList<Item> itens;
     private Controlador controller;
     private char direcao = 'U';
-    private final int DELAY = 100;
+    private final int DELAY = 0;
     private int iteracoes = 0;
 
     public AntClustering() throws IOException {
@@ -54,8 +55,8 @@ public class AntClustering extends JPanel implements ActionListener {
     }
 
     public void startGame() {
-        controller.criarFormigas(formigas, 5);
-        controller.criarItens(itens, 30);
+        controller.criarFormigas(formigas, 10);
+        controller.criarItens(itens, 70);
         Timer timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -99,7 +100,7 @@ public class AntClustering extends JPanel implements ActionListener {
     }
 
     public void moveFormigasCarregando() {
-        direcao = controller.move(formigasCarregando, direcao);
+        direcao = controller.moveCarregando(formigasCarregando, direcao);
     }
 
     public void decisaoPegar() {
