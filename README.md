@@ -21,5 +21,6 @@ java MainClass
 * Formigas pegam e largam itens.
 * Contador de iterações exibido na tela.
 * GUI intuitiva com representação visual do campo, formigas e itens.
+* Heterogenidade e multidimensionalidade (em implementação na branch Heterogêneo-multidimensional)
 
 ![Alt Text](/ant-clustering.jpg)
