@@ -8,6 +8,10 @@ O algoritmo de Ant Clustering é um exemplo de algoritmo inspirado em comportame
 Este programa simula o comportamento de formigas coletando itens e os agrupando. As formigas se movem pelo campo, pegam itens que encontram e os largam em locais onde existem muitos outros itens.
 
 ## Como executar
+* Necessário java 17.0.8 2023-07-18 LTS
+
+Execute os comandos
+
 javac MainClass.java
 
 java MainClass
