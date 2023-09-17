@@ -166,7 +166,7 @@ public class Controlador {
                 boolean itemPickedUp = false;
 
                 if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
-                    int soma = quantidadeItensProximos(itens, head);
+                    int soma = quantidadeItensProximosPegar(itens, head);
                     float chance = (float) (1 - soma / 8.0);
                     if (random.nextFloat() < chance) {
                         Point point = formiga.getPontos().get(0);
@@ -199,12 +199,12 @@ public class Controlador {
                 }
             }
             if (count == 0) {
-                int soma = quantidadeItensProximos(itens, head);
+                int soma = quantidadeItensProximosLargar(itens, head, formiga.getItem());
                 float chance = (float) soma / 8;
                 if (random.nextFloat() < chance) {
-                    if(formiga.getItem() instanceof Folha){
+                    if (formiga.getItem() instanceof Folha) {
                         itens.add(new Folha(WIDTH, HEIGHT, UNIT_SIZE, head));
-                    }else {
+                    } else {
                         itens.add(new Cupcake(WIDTH, HEIGHT, UNIT_SIZE, head));
                     }
                     formigaCarregandoIterator.remove();
@@ -214,7 +214,33 @@ public class Controlador {
         }
     }
 
-    public int quantidadeItensProximos(ArrayList<Item> itens, Point head) {
+    public int quantidadeItensProximosLargar(ArrayList<Item> itens, Point head, Item itemCarregando) {
+        int soma = 0;
+
+        int[][] directions = {
+                { -UNIT_SIZE, 0 }, // Cima
+                { UNIT_SIZE, 0 }, // Baixo
+                { 0, -UNIT_SIZE }, // Esquerda
+                { 0, UNIT_SIZE }, // Direita
+                { -UNIT_SIZE, -UNIT_SIZE }, // Superior Esquerdo
+                { UNIT_SIZE, -UNIT_SIZE }, // Inferior Esquerdo
+                { -UNIT_SIZE, UNIT_SIZE }, // Superior Direito
+                { UNIT_SIZE, UNIT_SIZE } // Inferior Direito
+        };
+
+        for (Item item : itens) {
+            for (int[] direction : directions) {
+                if (item.getPonto().x + direction[0] == head.x && item.getPonto().y + direction[1] == head.y) {
+                    if (item.getClass().equals(itemCarregando.getClass())) {
+                        soma += 1;
+                    }
+                }
+            }
+        }
+        return soma;
+    }
+
+    public int quantidadeItensProximosPegar(ArrayList<Item> itens, Point head) {
         int soma = 0;
 
         int[][] directions = {
