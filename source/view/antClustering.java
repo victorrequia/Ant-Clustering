@@ -29,12 +29,11 @@ public class AntClustering extends JPanel implements ActionListener {
     private ArrayList<Formiga> formigasCarregando = new ArrayList<>();
     private Image formigaImage;
     private Image formigaCarregandoImage;
-    private Image folhaImage;
     private ArrayList<Formiga> formigas;
     private ArrayList<Item> itens;
     private Controlador controller;
     private char direcao = 'U';
-    private final int DELAY = 100;
+    private final int DELAY = 0;
     private int iteracoes = 0;
 
     public AntClustering() throws IOException {
@@ -43,7 +42,6 @@ public class AntClustering extends JPanel implements ActionListener {
         controller = new Controlador(WIDTH, HEIGHT, UNIT_SIZE);
         bgImage = ImageIO.read(new File("source/images/background.jpg"));
         formigaImage = ImageIO.read(new File("source/images/formiga.png"));
-        folhaImage = ImageIO.read(new File("source/images/folha.png"));
         formigaCarregandoImage = ImageIO.read(new File("source/images/formiga_carregando.png"));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
@@ -53,7 +51,7 @@ public class AntClustering extends JPanel implements ActionListener {
 
     public void startGame() {
         controller.criarFormigas(formigas, 5);
-        controller.criarItens(itens, 30);
+        controller.criarItens(itens);
         Timer timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -75,8 +73,8 @@ public class AntClustering extends JPanel implements ActionListener {
 
         g.setColor(Color.RED);
         for (Item item : itens) {
-            g.drawImage(folhaImage, (int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
-                    null);
+            g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                    50,100);
         }
 
         g.setColor(Color.BLUE);
