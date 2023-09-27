@@ -21,8 +21,8 @@ import source.model.Formiga;
 import source.model.Item;
 
 public class AntClustering extends JPanel implements ActionListener {
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int WIDTH = 1900;
+    private final int HEIGHT = 900;
     private final int UNIT_SIZE = 20;
     private Image bgImage;
 
@@ -33,14 +33,14 @@ public class AntClustering extends JPanel implements ActionListener {
     private ArrayList<Item> itens;
     private Controlador controller;
     private char direcao = 'U';
-    private final int DELAY = 0;
+    private final int DELAY = 100;
     private int iteracoes = 0;
 
     public AntClustering() throws IOException {
         formigas = new ArrayList<>();
         itens = new ArrayList<>();
         controller = new Controlador(WIDTH, HEIGHT, UNIT_SIZE);
-        bgImage = ImageIO.read(new File("source/images/background.jpg"));
+        //bgImage = ImageIO.read(new File("source/images/background.jpg"));
         formigaImage = ImageIO.read(new File("source/images/formiga.png"));
         formigaCarregandoImage = ImageIO.read(new File("source/images/formiga_carregando.png"));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -51,7 +51,7 @@ public class AntClustering extends JPanel implements ActionListener {
 
     public void startGame() {
         controller.criarFormigas(formigas, 5);
-        controller.criarItens(itens);
+        controller.criarItens(itens, 300);
         Timer timer = new Timer(DELAY, this);
         timer.start();
     }
@@ -64,20 +64,36 @@ public class AntClustering extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.GREEN);
+
         for (Formiga formiga : formigas) {
             for (Point point : formiga.getPontos()) {
                 g.drawImage(formigaImage, point.x, point.y, UNIT_SIZE, UNIT_SIZE, null);
             }
         }
 
-        g.setColor(Color.RED);
         for (Item item : itens) {
-            g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
-                    50,100);
+            if (item.getDimensao_x() > 0 && item.getDimensao_y() > 0) { // Primeiro quadrante
+                g.setColor(Color.RED);
+                g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                        50, 100);
+            }
+            if (item.getDimensao_x() < 0 && item.getDimensao_y() > 0) { // Segundo quadrante
+                g.setColor(Color.GREEN);
+                g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                        50, 100);
+            }
+            if (item.getDimensao_x() < 0 && item.getDimensao_y() < 0) { // Terceiro quadrante
+                g.setColor(Color.BLUE);
+                g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                        50, 100);
+            }
+            if (item.getDimensao_x() > 0 && item.getDimensao_y() < 0) { // Quarto quadrante
+                g.setColor(Color.YELLOW);
+                g.fillArc((int) item.getPonto().getX(), (int) item.getPonto().getY(), UNIT_SIZE, UNIT_SIZE,
+                        50, 100);
+            }
         }
 
-        g.setColor(Color.BLUE);
         for (Formiga formiga : formigasCarregando) {
             for (Point point : formiga.getPontos()) {
                 g.drawImage(formigaCarregandoImage, point.x, point.y, UNIT_SIZE, UNIT_SIZE, null);

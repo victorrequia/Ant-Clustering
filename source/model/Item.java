@@ -1,27 +1,28 @@
 package source.model;
 
 import java.awt.Point;
-import java.util.Random;
 
 public class Item {
     private Point ponto;
     private double dimensao_x;
     private double dimensao_y;
 
-    // Colocar item de forma aleatória no mapa
-    public Item(int WIDTH, int HEIGHT, int UNIT_SIZE, double dimensao_x, double dimensao_y) {
-        this.dimensao_x = dimensao_x;
-        this.dimensao_y = dimensao_y;
-        int x = new Random().nextInt(WIDTH / UNIT_SIZE) * UNIT_SIZE;
-        int y = new Random().nextInt(HEIGHT / UNIT_SIZE) * UNIT_SIZE;
-        ponto = new Point(x, y);
-    }
-
-    // Colocar item de forma pontual no mapa
+    // Colocar item no mapa
     public Item(int WIDTH, int HEIGHT, int UNIT_SIZE, Point point) {
         int x = point.x;
         int y = point.y;
         ponto = new Point(x, y);
+        dimensao_x = Dimensao.dimensoes[Dimensao.count];
+        dimensao_y = Dimensao.dimensoes[Dimensao.count + 1];
+        Dimensao.count += 2;
+    }
+
+    public Item(int WIDTH, int HEIGHT, int UNIT_SIZE, Point point, double dimensao_x, double dimensao_y) {
+        int x = point.x;
+        int y = point.y;
+        ponto = new Point(x, y);
+        this.dimensao_x = dimensao_x;
+        this.dimensao_y = dimensao_y;
     }
 
     // Getters e Setters

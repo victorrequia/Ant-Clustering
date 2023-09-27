@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import source.model.Dimensao;
 import source.model.Formiga;
 import source.model.Item;
 
@@ -31,32 +30,32 @@ public class Controlador {
     }
 
     // Colocar itens de forma aleatorio no mapa
-    public void criarItens(ArrayList<Item> itens) {
-        Dimensao.aaaaaa.
+    public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
 
         Item item;
         int i = 0;
         int count;
 
-        /*if (itens.isEmpty()) {
-            item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
-            itens.add(item);
-        }
+        while (i <= quantidadeItens) {
+            count = 0;
+            Point coordenada = auxiliares.coordenadasPoint(WIDTH, HEIGHT, UNIT_SIZE);
+            for (int j = 0; j < itens.size(); j++) {
+                if (itens.get(j).getPonto().getX() == coordenada.getX()
+                        && itens.get(j).getPonto().getY() == coordenada.getY()) {
+                    count++;
+                    break;
+                }
+            }
 
-        count = 0;
-        item = new Item(WIDTH, HEIGHT, UNIT_SIZE);
-        for (int j = 0; j < itens.size(); j++) {
-            if (itens.get(j).getPonto().getX() == item.getPonto().getX()
-                    && itens.get(j).getPonto().getY() == item.getPonto().getY()) {
-                count++;
-                break;
+            System.out.println("i: " + i);
+            if (count == 0) {
+                System.out.println("TDTD");
+                item = new Item(WIDTH, HEIGHT, UNIT_SIZE, coordenada);
+                itens.add(item);
+                i++;
             }
         }
-        if (count == 0) {
-            itens.add(item);
-            i++;
-        }*/
-
+        System.out.println("TERMINE");
     }
 
     // Movimentar a formiga
@@ -119,6 +118,8 @@ public class Controlador {
                     int soma = quantidadeItensProximos(itens, head);
                     float chance = (float) (1 - soma / 8.0);
                     if (random.nextFloat() < chance) {
+                        formiga.setDimensao_x(item.getDimensao_x());
+                        formiga.setDimensao_y(item.getDimensao_y());
                         carregando.add(formiga);
                         formigaIterator.remove();
                         itemIterator.remove();
@@ -150,7 +151,7 @@ public class Controlador {
                 int soma = quantidadeItensProximos(itens, head);
                 float chance = (float) soma / 8;
                 if (random.nextFloat() < chance) {
-                    itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head));
+                    itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head, formiga.getDimensao_x(), formiga.getDimensao_y()));
                     formigaCarregandoIterator.remove();
                     formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE, formiga.getPontos().get(0)));
                 }
