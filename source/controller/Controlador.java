@@ -114,7 +114,7 @@ public class Controlador {
                 if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
                     ArrayList<Item> itensProximos = quantidadeItensProximos(itens, head);
                     int quantidadeItensProximos = itensProximos.size();
-                    if (random.nextDouble() < probabilidadePegar(item.getDimensao_x(), item.getDimensao_y(),
+                    if (random.nextFloat() < probabilidadePegar(item.getDimensao_x(), item.getDimensao_y(),
                             itensProximos, quantidadeItensProximos)) {
                         formiga.setDimensao_x(item.getDimensao_x());
                         formiga.setDimensao_y(item.getDimensao_y());
@@ -150,7 +150,7 @@ public class Controlador {
             if (count == 0) {
                 ArrayList<Item> itensProximos = quantidadeItensProximos(itens, head);
                 int quantidadeItensProximos = itensProximos.size();
-                if (random.nextDouble() < probabilidadeLargar(formiga.getDimensao_x(), formiga.getDimensao_y(),
+                if (random.nextFloat() < probabilidadeLargar(formiga.getDimensao_x(), formiga.getDimensao_y(),
                         itensProximos, quantidadeItensProximos)) {
                     itens.add(
                             new Item(WIDTH, HEIGHT, UNIT_SIZE, head, formiga.getDimensao_x(), formiga.getDimensao_y()));
@@ -193,7 +193,7 @@ public class Controlador {
         // k1 = 0.1
         // k2 = 0.3
 
-        double fi = Math.pow((0.3 / 0.3 + somatorio), 2);
+        double fi = Math.pow((0.7 / 0.7 + somatorio), 2);
 
         return fi;
     }
@@ -206,7 +206,7 @@ public class Controlador {
         // k1 = 0.3
         // k2 = 0.6
 
-        double fi = Math.pow((somatorio / 0.3 + somatorio), 2);
+        double fi = Math.pow((somatorio / 0.7 + somatorio), 2);
 
         return fi;
     }
@@ -221,7 +221,7 @@ public class Controlador {
                 Item itemProximo = itensProximos.get(i);
                 double distancia = Math.sqrt(Math.pow(dimensaoX - itemProximo.getDimensao_x(), 2)
                         + Math.pow(dimensaoY - itemProximo.getDimensao_y(), 2));
-                somatorio += 1 - (distancia / 15);
+                somatorio += (1 - (distancia / 50));
             }
             return somatorio / 8;
         }
