@@ -33,14 +33,14 @@ public class AntClustering extends JPanel implements ActionListener {
     private ArrayList<Item> itens;
     private Controlador controller;
     private char direcao = 'U';
-    private final int DELAY = 100;
+    private final int DELAY = 0;
     private int iteracoes = 0;
 
     public AntClustering() throws IOException {
         formigas = new ArrayList<>();
         itens = new ArrayList<>();
         controller = new Controlador(WIDTH, HEIGHT, UNIT_SIZE);
-        //bgImage = ImageIO.read(new File("source/images/background.jpg"));
+        // bgImage = ImageIO.read(new File("source/images/background.jpg"));
         formigaImage = ImageIO.read(new File("source/images/formiga.png"));
         formigaCarregandoImage = ImageIO.read(new File("source/images/formiga_carregando.png"));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -50,8 +50,8 @@ public class AntClustering extends JPanel implements ActionListener {
     }
 
     public void startGame() {
-        controller.criarFormigas(formigas, 5);
-        controller.criarItens(itens, 300);
+        controller.criarFormigas(formigas, 15);
+        controller.criarItens(itens, 399);
         Timer timer = new Timer(DELAY, this);
         timer.start();
     }

@@ -36,7 +36,7 @@ public class Controlador {
         int i = 0;
         int count;
 
-        while (i <= quantidadeItens) {
+        while (i < quantidadeItens) {
             count = 0;
             Point coordenada = auxiliares.coordenadasPoint(WIDTH, HEIGHT, UNIT_SIZE);
             for (int j = 0; j < itens.size(); j++) {
@@ -46,16 +46,13 @@ public class Controlador {
                     break;
                 }
             }
-
             System.out.println("i: " + i);
             if (count == 0) {
-                System.out.println("TDTD");
                 item = new Item(WIDTH, HEIGHT, UNIT_SIZE, coordenada);
                 itens.add(item);
                 i++;
             }
         }
-        System.out.println("TERMINE");
     }
 
     // Movimentar a formiga
@@ -115,15 +112,18 @@ public class Controlador {
                 boolean itemPickedUp = false;
 
                 if (item.getPonto().getX() == head.getX() && item.getPonto().getY() == head.getY()) {
-                    int soma = quantidadeItensProximos(itens, head);
-                    float chance = (float) (1 - soma / 8.0);
-                    if (random.nextFloat() < chance) {
+                    ArrayList<Item> itensProximos = quantidadeItensProximos(itens, head);
+                    int quantidadeItensProximos = itensProximos.size();
+                    if (random.nextDouble() < probabilidadePegar(item.getDimensao_x(), item.getDimensao_y(),
+                            itensProximos, quantidadeItensProximos)) {
                         formiga.setDimensao_x(item.getDimensao_x());
                         formiga.setDimensao_y(item.getDimensao_y());
                         carregando.add(formiga);
                         formigaIterator.remove();
                         itemIterator.remove();
                         itemPickedUp = true;
+                        // System.out.println("Peguei item x: " + item.getDimensao_x());
+                        // System.out.println("Peguei item y: " + item.getDimensao_y());
                     }
                     break;
                 }
@@ -138,8 +138,8 @@ public class Controlador {
         Iterator<Formiga> formigaCarregandoIterator = formigasCarregando.iterator();
         int count = 0;
         while (formigaCarregandoIterator.hasNext()) {
-            Formiga formiga = formigaCarregandoIterator.next();
             count = 0;
+            Formiga formiga = formigaCarregandoIterator.next();
             Point head = formiga.getPontos().get(0);
             for (int i = 0; i < itens.size(); i++) {
                 if (itens.get(i).getPonto().getX() == head.getX() && itens.get(i).getPonto().getY() == head.getY()) {
@@ -148,10 +148,12 @@ public class Controlador {
                 }
             }
             if (count == 0) {
-                int soma = quantidadeItensProximos(itens, head);
-                float chance = (float) soma / 8;
-                if (random.nextFloat() < chance) {
-                    itens.add(new Item(WIDTH, HEIGHT, UNIT_SIZE, head, formiga.getDimensao_x(), formiga.getDimensao_y()));
+                ArrayList<Item> itensProximos = quantidadeItensProximos(itens, head);
+                int quantidadeItensProximos = itensProximos.size();
+                if (random.nextDouble() < probabilidadeLargar(formiga.getDimensao_x(), formiga.getDimensao_y(),
+                        itensProximos, quantidadeItensProximos)) {
+                    itens.add(
+                            new Item(WIDTH, HEIGHT, UNIT_SIZE, head, formiga.getDimensao_x(), formiga.getDimensao_y()));
                     formigaCarregandoIterator.remove();
                     formigas.add(new Formiga(WIDTH, HEIGHT, UNIT_SIZE, formiga.getPontos().get(0)));
                 }
@@ -159,8 +161,8 @@ public class Controlador {
         }
     }
 
-    public int quantidadeItensProximos(ArrayList<Item> itens, Point head) {
-        int soma = 0;
+    public ArrayList<Item> quantidadeItensProximos(ArrayList<Item> itens, Point head) {
+        ArrayList<Item> itensProximos = new ArrayList<Item>();
 
         int[][] directions = {
                 { -UNIT_SIZE, 0 }, // Cima
@@ -176,10 +178,52 @@ public class Controlador {
         for (Item item : itens) {
             for (int[] direction : directions) {
                 if (item.getPonto().x + direction[0] == head.x && item.getPonto().y + direction[1] == head.y) {
-                    soma += 1;
+                    itensProximos.add(item);
                 }
             }
         }
-        return soma;
+        return itensProximos;
+    }
+
+    public double probabilidadePegar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
+            int quantidadeItensProximos) {
+        double somatorio = distanciaEuclidiana(dimensaoX, dimensaoY, itensProximos, quantidadeItensProximos);
+        // alfa = 0.3
+        // s^2 = 9
+        // k1 = 0.1
+        // k2 = 0.3
+
+        double fi = Math.pow((0.3 / 0.3 + somatorio), 2);
+
+        return fi;
+    }
+
+    public double probabilidadeLargar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
+            int quantidadeItensProximos) {
+        double somatorio = distanciaEuclidiana(dimensaoX, dimensaoY, itensProximos, quantidadeItensProximos);
+        // alfa = 0.3
+        // s^2 = 9
+        // k1 = 0.3
+        // k2 = 0.6
+
+        double fi = Math.pow((somatorio / 0.3 + somatorio), 2);
+
+        return fi;
+    }
+
+    public static double distanciaEuclidiana(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
+            int quantidadeItensProximos) {
+        if (quantidadeItensProximos == 0) {
+            return 0;
+        } else {
+            double somatorio = 0;
+            for (int i = 0; i < itensProximos.size(); i++) {
+                Item itemProximo = itensProximos.get(i);
+                double distancia = Math.sqrt(Math.pow(dimensaoX - itemProximo.getDimensao_x(), 2)
+                        + Math.pow(dimensaoY - itemProximo.getDimensao_y(), 2));
+                somatorio += 1 - (distancia / 15);
+            }
+            return somatorio / 8;
+        }
     }
 }
