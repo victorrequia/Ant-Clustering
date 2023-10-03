@@ -21,8 +21,8 @@ import source.model.Formiga;
 import source.model.Item;
 
 public class AntClustering extends JPanel implements ActionListener {
-    private final int WIDTH = 1900;
-    private final int HEIGHT = 900;
+    private final int WIDTH = 1600;
+    private final int HEIGHT = 1000;
     private final int UNIT_SIZE = 20;
     private Image bgImage;
 
@@ -40,7 +40,7 @@ public class AntClustering extends JPanel implements ActionListener {
         formigas = new ArrayList<>();
         itens = new ArrayList<>();
         controller = new Controlador(WIDTH, HEIGHT, UNIT_SIZE);
-        // bgImage = ImageIO.read(new File("source/images/background.jpg"));
+        bgImage = ImageIO.read(new File("source/images/background.jpeg"));
         formigaImage = ImageIO.read(new File("source/images/formiga.png"));
         formigaCarregandoImage = ImageIO.read(new File("source/images/formiga_carregando.png"));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -125,11 +125,11 @@ public class AntClustering extends JPanel implements ActionListener {
         moveFormigasCarregando();
         iteracoes++;
         repaint();
-    }
+    } 
 
     private void drawIterationCounter(Graphics g) {
         g.setColor(Color.BLACK); // Define a cor do texto para branco
         g.setFont(new Font("Arial", Font.BOLD, 16)); // Define a fonte
         g.drawString("Iterações: " + iteracoes, 10, 20); // Desenha o texto no canto superior esquerdo
     }
-}
+}   

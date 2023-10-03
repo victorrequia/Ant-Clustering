@@ -31,7 +31,6 @@ public class Controlador {
 
     // Colocar itens de forma aleatorio no mapa
     public void criarItens(ArrayList<Item> itens, int quantidadeItens) {
-
         Item item;
         int i = 0;
         int count;
@@ -185,34 +184,21 @@ public class Controlador {
         return itensProximos;
     }
 
-    public double probabilidadePegar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
-            int quantidadeItensProximos) {
+    public double probabilidadePegar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos, int quantidadeItensProximos) {
         double somatorio = distanciaEuclidiana(dimensaoX, dimensaoY, itensProximos, quantidadeItensProximos);
-        // alfa = 0.3
-        // s^2 = 9
-        // k1 = 0.1
-        // k2 = 0.3
-
         double fi = Math.pow((0.7 / 0.7 + somatorio), 2);
 
         return fi;
     }
 
-    public double probabilidadeLargar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
-            int quantidadeItensProximos) {
+    public double probabilidadeLargar(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos, int quantidadeItensProximos) {
         double somatorio = distanciaEuclidiana(dimensaoX, dimensaoY, itensProximos, quantidadeItensProximos);
-        // alfa = 0.3
-        // s^2 = 9
-        // k1 = 0.3
-        // k2 = 0.6
-
         double fi = Math.pow((somatorio / 0.7 + somatorio), 2);
 
         return fi;
     }
 
-    public static double distanciaEuclidiana(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos,
-            int quantidadeItensProximos) {
+    public static double distanciaEuclidiana(double dimensaoX, double dimensaoY, ArrayList<Item> itensProximos, int quantidadeItensProximos) {
         if (quantidadeItensProximos == 0) {
             return 0;
         } else {
